@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<saml2p:Response xmlns:saml2p="urn:oasis:names:tc:SAML:2.0:protocol" Destination="http://localhost:9090/saml/SSO"
+<saml2p:Response xmlns:saml2p="urn:oasis:names:tc:SAML:2.0:protocol" Destination="https://aws-saml.okya.io/saml/SSO"
                  ID="1484b234-bf83-449d-8d7d-6461646bbb03" InResponseTo="@@InResponseTo@@"
                  IssueInstant="@@IssueInstant@@" Version="2.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <saml2:Issuer xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion"

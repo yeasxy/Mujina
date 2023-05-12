@@ -1,5 +1,6 @@
 package mujina.idp;
 
+import lombok.extern.slf4j.Slf4j;
 import mujina.api.IdpConfiguration;
 import mujina.saml.SAMLAttribute;
 import mujina.saml.SAMLPrincipal;
@@ -35,6 +36,7 @@ import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
 @Controller
+@Slf4j
 public class SsoController {
 
   @Autowired
@@ -46,12 +48,14 @@ public class SsoController {
   @GetMapping("/SingleSignOnService")
   public void singleSignOnServiceGet(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
     throws IOException, MarshallingException, SignatureException, MessageEncodingException, ValidationException, SecurityException, MessageDecodingException, MetadataProviderException, ServletException {
+    log.info("开始进行sso");
     doSSO(request, response, authentication, false);
   }
 
   @PostMapping("/SingleSignOnService")
   public void singleSignOnServicePost(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
     throws IOException, MarshallingException, SignatureException, MessageEncodingException, ValidationException, SecurityException, MessageDecodingException, MetadataProviderException, ServletException {
+    log.info("开始进行sso");
     doSSO(request, response, authentication, true);
   }
 

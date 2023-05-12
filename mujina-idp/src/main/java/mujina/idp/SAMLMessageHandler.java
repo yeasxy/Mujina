@@ -141,6 +141,22 @@ public class SAMLMessageHandler {
 
     messageContext.setOutboundMessageIssuer(entityId);
     messageContext.setRelayState(principal.getRelayState());
+//
+//    try {
+//      SAMLObject message = messageContext.getOutboundSAMLMessage();
+//      Marshaller marshaller = Configuration.getMarshallerFactory().getMarshaller(message);
+//      Element responseElement = marshaller.marshall(message);
+//      TransformerFactory transformerFactory = TransformerFactory.newInstance();
+//      Transformer transformer = transformerFactory.newTransformer();
+//      StringWriter writer = new StringWriter();
+//      transformer.transform(new DOMSource(responseElement), new StreamResult(writer));
+//
+//      System.out.println(writer);
+//    } catch (Exception e) {
+//
+//    }
+
+
 
     encoder.encode(messageContext);
 
