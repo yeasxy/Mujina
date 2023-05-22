@@ -99,6 +99,10 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     return samlAuthenticationProvider;
   }
 
+  /**
+   * basic http校验
+   * @return
+   */
   @Bean
   public SAMLEntryPoint samlEntryPoint() {
     WebSSOProfileOptions webSSOProfileOptions = new WebSSOProfileOptions();
@@ -174,13 +178,23 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
   @Bean
   public SAMLProcessingFilter samlWebSSOProcessingFilter() throws Exception {
     SAMLProcessingFilter samlWebSSOProcessingFilter = new SAMLProcessingFilter();
-    samlWebSSOProcessingFilter.setFilterProcessesUrl("saml/SSO");
+    samlWebSSOProcessingFilter.setFilterProcessesUrl("saml");
     samlWebSSOProcessingFilter.setAuthenticationManager(authenticationManager());
     samlWebSSOProcessingFilter.setAuthenticationSuccessHandler(successRedirectHandler());
     samlWebSSOProcessingFilter.setAuthenticationFailureHandler(authenticationFailureHandler());
     return samlWebSSOProcessingFilter;
   }
 
+  /**
+   * 生成和提供SAML元数据（Metadata）。
+   * @return
+   * @throws InvalidKeySpecException
+   * @throws CertificateException
+   * @throws NoSuchAlgorithmException
+   * @throws KeyStoreException
+   * @throws IOException
+   * @throws XMLStreamException
+   */
   @Bean
   public MetadataGeneratorFilter metadataGeneratorFilter() throws InvalidKeySpecException, CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, XMLStreamException {
     return new MetadataGeneratorFilter(metadataGenerator());
@@ -199,6 +213,10 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     return new DefaultSecurityFilterChain(new AntPathRequestMatcher(pattern), entryPoint);
   }
 
+  /**
+   * 设置扩展的元数据（Extended Metadata）配置。扩展的元数据包含了更详细的配置信息，如单点登录（SSO）终端点、证书颁发者、名称ID格式等。
+   * @return
+   */
   @Bean
   public ExtendedMetadata extendedMetadata() {
     ExtendedMetadata extendedMetadata = new ExtendedMetadata();
@@ -207,6 +225,12 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     return extendedMetadata;
   }
 
+  /**
+   * sso metadata 提供者
+   * @return
+   * @throws MetadataProviderException
+   * @throws XMLParserException
+   */
   @Bean
   public MetadataProvider identityProvider() throws MetadataProviderException, XMLParserException {
     Resource resource = defaultResourceLoader.getResource(identityProviderMetadataUrl);
@@ -218,6 +242,13 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     return extendedMetadataDelegate;
   }
 
+  /**
+   * org.springframework.security.saml.metadata.MetadataGeneratorFilter#setManager(org.springframework.security.saml.metadata.MetadataManager)
+   * org.springframework.security.saml.SAMLEntryPoint#setMetadata(org.springframework.security.saml.metadata.MetadataManager)
+   * @return
+   * @throws MetadataProviderException
+   * @throws XMLParserException
+   */
   @Bean
   @Qualifier("metadata")
   public CachingMetadataManager metadata() throws MetadataProviderException, XMLParserException {
@@ -247,6 +278,16 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     return new ProxiedSAMLContextProviderLB(new URI(spBaseUrl));
   }
 
+  /**
+   * MetadataGeneratorFilter中使用，生成metadata
+   * @return
+   * @throws NoSuchAlgorithmException
+   * @throws CertificateException
+   * @throws InvalidKeySpecException
+   * @throws KeyStoreException
+   * @throws IOException
+   * @throws XMLStreamException
+   */
   @Bean
   public MetadataGenerator metadataGenerator() throws NoSuchAlgorithmException, CertificateException, InvalidKeySpecException, KeyStoreException, IOException, XMLStreamException {
     MetadataGenerator metadataGenerator = new MetadataGenerator();

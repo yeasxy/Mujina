@@ -1,5 +1,6 @@
 package mujina.sp;
 
+import org.apache.commons.lang3.StringUtils;
 import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 import org.opensaml.ws.transport.InTransport;
 import org.opensaml.ws.transport.http.HttpServletRequestAdapter;
@@ -19,6 +20,10 @@ public class ConfigurableSAMLEntryPoint extends SAMLEntryPoint {
       String forceAuthn = messageTransport.getParameterValue("force-authn");
       if ("true".equals(forceAuthn)) {
         profileOptions.setForceAuthN(true);
+      }
+      String relayState = messageTransport.getParameterValue("RelayState");
+      if (StringUtils.isNotEmpty(relayState)) {
+        profileOptions.setRelayState(relayState);
       }
     }
     return profileOptions;
